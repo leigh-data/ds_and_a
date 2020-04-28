@@ -1,6 +1,9 @@
 import pytest
 
-from ds_and_a.queues import ArrayQueue, QueueWithTwoStacks
+from ds_and_a.queues import (
+    ArrayQueue,
+    QueueWithTwoStacks,
+    reverse_queue)
 
 
 @pytest.fixture
@@ -19,6 +22,16 @@ def qts():
     queue.enqueue(1)
     queue.enqueue(2)
     queue.enqueue(3)
+
+    return queue
+
+
+@pytest.fixture
+def rq():
+    queue = ArrayQueue(10)
+
+    for i in range(1, 11):
+        queue.enqueue(i)
 
     return queue
 
@@ -111,3 +124,24 @@ def test_qts_is_empty_without_items():
 
 def test_qts___str__(qts):
     assert str(qts) == "<QueueWithTwoStacks>"
+
+
+def test_queue_reverse(rq):
+    expected_items = [5, 4, 3, 2, 1, 6, 7, 8, 9, 10]
+    expected_string = f"<ArrayQueue: {[item for item in expected_items]}>"
+
+    reverse_queue(rq, 5)
+    assert str(rq) == expected_string
+
+
+def test_queue_reverse_error_negative_k():
+    rq = ArrayQueue(10)
+
+    with pytest.raises(ValueError):
+        reverse_queue(rq, -11)
+
+
+def test_queue_reverse_error_high_k(rq):
+
+    with pytest.raises(ValueError):
+        reverse_queue(rq, 11)

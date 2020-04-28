@@ -78,3 +78,19 @@ class QueueWithTwoStacks:
 
     def __str__(self):
         return "<QueueWithTwoStacks>"
+
+
+def reverse_queue(queue, k):
+    if k < 0 or k > queue.count:
+        raise ValueError
+
+    stack = Stack()
+
+    for i in range(k):
+        stack.push(queue.dequeue())
+
+    while not stack.is_empty():
+        queue.enqueue(stack.pop())
+
+    for i in range(queue.count - k):
+        queue.enqueue(queue.dequeue())
