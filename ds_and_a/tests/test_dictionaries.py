@@ -7,15 +7,24 @@ from ds_and_a.dictionaries import (
     count_pairs_with_diff,
     two_sum)
 from ds_and_a.hashtable import Hashtable
+from ds_and_a.hashmap import HashMap
 
 
 @pytest.fixture
 def hashtable():
     ht = Hashtable()
-    ht.put(1, "Ronnie Wood")
     ht.put(7, "Keith Richards")
+    ht.put(2, "Ronnie Wood")
 
     return ht
+
+
+@pytest.fixture
+def hashmap():
+    hm = HashMap()
+    hm.put(7, "Keith Richards")
+
+    return hm
 
 
 @pytest.mark.parametrize("str1, expected", [
@@ -62,8 +71,12 @@ def test_two_sum(lyst, target, expected):
     assert two_sum(lyst, target) == expected
 
 
-def test_hashtable_get(hashtable):
-    assert hashtable.get(7) == "Keith Richards"
+@pytest.mark.parametrize("key, value", [
+    (7, "Keith Richards"),
+    (2, "Ronnie Wood"),
+])
+def test_hashtable_get(hashtable, key, value):
+    assert hashtable.get(key) == value
 
 
 def test_hashtable_put(hashtable):
@@ -82,5 +95,32 @@ def test_hashtable_remove(hashtable):
     assert hashtable.get(67) is None
 
 
-def test_hashtable_remove(hashtable):
+def test_hashtable_remove_none(hashtable):
     assert hashtable.remove(54) == None
+
+
+def test_hashmap_get(hashmap):
+    assert hashmap.get(7) == "Keith Richards"
+
+
+def test_hashmap_put(hashmap):
+    count = hashmap.size()
+    hashmap.put(8, "Mick Jagger")
+    assert hashmap.get(8) == "Mick Jagger"
+    assert hashmap.size() == (count + 1)
+
+
+def test_hashmap_remove(hashmap):
+    hashmap.put(11, "Brian Jones")
+    size = hashmap.size()
+    hashmap.remove(11)
+    assert hashmap.size() == (size - 1)
+
+
+def test_hashmap_put_chained(hashmap):
+    hashmap.put(6, "Mick Taylor")
+    assert hashmap.get(6) == "Mick Taylor"
+
+
+def test_hashmap_remove_none(hashmap):
+    assert hashmap.remove(54) == None
