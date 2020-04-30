@@ -3,37 +3,8 @@ import pytest
 from ds_and_a.queues import (
     ArrayQueue,
     QueueWithTwoStacks,
-    reverse_queue)
-
-
-@pytest.fixture
-def aq():
-    queue = ArrayQueue(5)
-    queue.enqueue(1)
-    queue.enqueue(2)
-    queue.enqueue(3)
-
-    return queue
-
-
-@pytest.fixture
-def qts():
-    queue = QueueWithTwoStacks()
-    queue.enqueue(1)
-    queue.enqueue(2)
-    queue.enqueue(3)
-
-    return queue
-
-
-@pytest.fixture
-def rq():
-    queue = ArrayQueue(10)
-
-    for i in range(1, 11):
-        queue.enqueue(i)
-
-    return queue
+    reverse_queue,
+    TwoQueueStack)
 
 
 def test_array_queue_is_empty():
@@ -145,3 +116,42 @@ def test_queue_reverse_error_high_k(rq):
 
     with pytest.raises(ValueError):
         reverse_queue(rq, 11)
+
+
+def test_tqs_push(tqs):
+    assert tqs.size() == 1
+
+
+def test_tqs_pop(tqs):
+    assert tqs.pop() == 1
+
+
+def test_tqs_pop_multiple_items(tqs):
+    tqs.push(2)
+    tqs.push(3)
+
+    for i in range(3, 0, -1):
+        assert tqs.pop() == i
+        assert tqs.size() == i - 1
+
+
+def test_tqs_pop_is_empty_false(tqs):
+    assert tqs.is_empty() == False
+
+
+def test_tqs_pop_is_empty():
+    tqs = TwoQueueStack()
+    assert tqs.is_empty() == True
+
+
+def test_tqs__str__(tqs):
+    tqs.push(2)
+    tqs.push(3)
+
+    assert str(tqs) == "<TwoQueueStack: deque([1, 2, 3])>"
+
+
+def test_tqs__str__empty(tqs):
+    tqs.pop()
+
+    assert str(tqs) == "<TwoQueueStack: deque([])>"

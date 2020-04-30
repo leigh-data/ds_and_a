@@ -1,4 +1,5 @@
 import array as arr
+from collections import deque
 
 from ds_and_a.stacks import Stack
 
@@ -94,3 +95,46 @@ def reverse_queue(queue, k):
 
     for i in range(queue.count - k):
         queue.enqueue(queue.dequeue())
+
+
+class TwoQueueStack:
+    def __init__(self):
+        self.queue1 = deque()
+        self.queue2 = deque()
+        self.top = None
+
+    def push(self, item):
+        self.queue1.append(item)
+        self.top = item
+
+    def pop(self):
+        if self.is_empty():
+            return IndexError
+
+        while len(self.queue1) > 1:
+            self.top = self.queue1.popleft()
+            self.queue2.append(self.top)
+
+        self.swap_queues()
+
+        return self.queue2.popleft()
+
+    def swap_queues(self):
+        temp = self.queue1
+        self.queue1 = self.queue2
+        self.queue2 = temp
+
+    def is_empty(self):
+        return len(self.queue1) == 0
+
+    def size(self):
+        return len(self.queue1)
+
+    def peek(self):
+        if self.is_empty():
+            raise IndexError
+
+        return self.top
+
+    def __str__(self):
+        return f"<TwoQueueStack: {self.queue1}>"
