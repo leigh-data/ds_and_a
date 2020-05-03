@@ -106,12 +106,12 @@ def test_tree_minimum_traversal_tree(traversal_tree):
     assert traversal_tree.minimum() == 3
 
 
-def test_tree_minimum_recursice(full_tree):
-    assert full_tree.minimum() == 1
+def test_tree_minimum_recursive(full_tree):
+    assert full_tree.minimum_recursive().value == 1
 
 
 def test_tree_minimum_recursive_traversal_tree(traversal_tree):
-    assert traversal_tree.minimum() == 3
+    assert traversal_tree.minimum_recursive().value == 3
 
 
 def test__eq__(full_tree):
@@ -229,3 +229,39 @@ def test_tree_contains(full_tree, value):
 @pytest.mark.parametrize("value", [12, 3, 13, 2, 5, 11])
 def test_tree_contains_all_false(full_tree, value):
     assert full_tree.contains(value) == False
+
+
+@pytest.mark.parametrize("first, second", [
+    (4, 9), (1, 6), (8, 10)
+])
+def test_tree_are_siblings(full_tree, first, second):
+    assert full_tree.are_siblings(first, second) == True
+
+
+@pytest.mark.parametrize("first, second", [
+    (4, 10), (1, 4), (8, 9)
+])
+def test_tree_are_siblings_all_false(full_tree, first, second):
+    assert full_tree.are_siblings(first, second) == False
+
+
+@pytest.mark.parametrize("value, lyst", [
+    (1, [4, 7]),
+    (6, [4, 7]),
+    (8, [9, 7]),
+    (10, [9, 7]),
+    (4, [7]),
+    (9, [7]),
+    (7, []),
+    (7666, [])
+])
+def test_tree_ancestors(full_tree, value, lyst):
+    assert full_tree.get_ancestors(value) == lyst
+
+
+def test_tree___str__(full_tree):
+    assert str(full_tree) == "<Tree: 7>"
+
+
+def test_tree___str___traversal(traversal_tree):
+    assert str(traversal_tree) == "<Tree: 20>"

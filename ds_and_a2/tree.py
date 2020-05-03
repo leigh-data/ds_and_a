@@ -112,7 +112,7 @@ class Tree:
     def minimum_recursive(self):
         def recurse(node):
             if node.left is None:
-                return node.value
+                return node
 
             return recurse(node.left)
 
@@ -197,6 +197,45 @@ class Tree:
 
         return
 
+    def are_siblings(self, first, second):
+        def recurse(node, first, second):
+            if node is None:
+                return False
+
+            are_sibling = False
+
+            if node.left is not None and node.left is not None:
+                are_sibling = (
+                    node.left.value == first and node.right.value == second) or (
+                    node.right.value == first and node.left.value == second)
+
+            return (
+                are_sibling
+                or recurse(node.left, first, second)
+                or recurse(node.right, first, second)
+            )
+
+        return recurse(self.root, first, second)
+
+    def get_ancestors(self, value):
+        lyst = list()
+
+        def recurse(node, value, lyst):
+            if node is None:
+                return False
+
+            if node.value == value:
+                return True
+
+            if recurse(node.left, value, lyst) or recurse(node.right, value, lyst):
+                lyst.append(node.value)
+                return True
+
+            return False
+
+        recurse(self.root, value, lyst)
+        return lyst
+
     def __eq__(self, other):
         def recurse(first, second):
             if first is None and second is None:
@@ -212,4 +251,5 @@ class Tree:
 
         return recurse(self.root, other.root)
 
-    # def are_siblings(self,)
+    def __str__(self):
+        return f"<Tree: {self.root.value}>"
